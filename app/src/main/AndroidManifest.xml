@@ -35,12 +35,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_map_api_key" />
 
-        <service
-            android:name=".LocationForegroundService"
-            android:enabled="true"
-            android:stopWithTask="false" />
-
-        <receiver android:name=".ActionReceiver" />
     </application>
 
 </manifest>
