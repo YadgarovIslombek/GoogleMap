@@ -1,14 +1,5 @@
 <resources>
-    <string name="app_name">GoogleMap Route Example</string>
-    <string name="google_map_api_key">AIzaSyCmFA_Yj4jkHWEJPgVp162YkrmbUTAGoLw</string>
-    <string name="location_unknown">Location unknown</string>
-    <string name="location_updates_label">Location Updates</string>
-
-    <string name="permission_rationale">Location permission is needed for core functionality</string>
-    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
-    <string name="settings">Settings</string>
-    <string name="ok">OK</string>
-    <string name="request_location_updates">Request location updates</string>
-    <string name="remove_location_updates">Remove location updates</string>
-    <string name="location_updated">Location Updated: %1$s</string>
+    <string name="app_name">MapRouteBetweenMarkers</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_map_api_key">AIzaSyAL2WcAI1zoAeYYUChAqqsw77cuQo1N0TM</string>
 </resources>

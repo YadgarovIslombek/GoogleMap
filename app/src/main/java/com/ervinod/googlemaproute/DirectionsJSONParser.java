@@ -1,21 +1,12 @@
 package com.ervinod.googlemaproute;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,7 +27,7 @@ public class DirectionsJSONParser {
             /** Traversing all routes */
             for(int i=0;i<jRoutes.length();i++){
                 jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
-                List path = new ArrayList<HashMap<String, String>>();
+                List<HashMap<String, String>> path = new ArrayList<HashMap<String, String>>();
 
                 /** Traversing all legs */
                 for(int j=0;j<jLegs.length();j++){
@@ -46,13 +37,13 @@ public class DirectionsJSONParser {
                     for(int k=0;k<jSteps.length();k++){
                         String polyline = "";
                         polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
-                        List list = decodePoly(polyline);
+                        List<LatLng> list = decodePoly(polyline);
 
                         /** Traversing all points */
                         for(int l=0;l <list.size();l++){
                             HashMap<String, String> hm = new HashMap<String, String>();
-                            hm.put("lat", Double.toString(((LatLng)list.get(l)).latitude) );
-                            hm.put("lng", Double.toString(((LatLng)list.get(l)).longitude) );
+                            hm.put("lat", Double.toString((list.get(l)).latitude) );
+                            hm.put("lng", Double.toString((list.get(l)).longitude) );
                             path.add(hm);
                         }
                     }
@@ -72,9 +63,9 @@ public class DirectionsJSONParser {
      * Method to decode polyline points
      * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
      * */
-    private List decodePoly(String encoded) {
+    private List<LatLng> decodePoly(String encoded) {
 
-        List poly = new ArrayList();
+        List<LatLng> poly = new ArrayList<>();
         int index = 0, len = encoded.length();
         int lat = 0, lng = 0;
 

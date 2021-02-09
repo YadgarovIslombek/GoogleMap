@@ -1,4 +1,5 @@
 package com.ervinod.googlemaproute;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -50,9 +51,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(-34, 151);
+        LatLng Xorazm = new LatLng(41.333332, 61.0);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Xorazm, 16));
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -86,6 +87,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+    @SuppressLint("StaticFieldLeak")
     private class DownloadTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... url) {
@@ -116,6 +118,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * A class to parse the Google Places in JSON format
      */
+    @SuppressLint("StaticFieldLeak")
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
         // Parsing the data in non-ui thread
@@ -135,12 +138,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
             return routes;
         }
-
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            ArrayList<LatLng> points = null;
-            PolylineOptions lineOptions = null;
+            ArrayList<LatLng> points = new ArrayList<>();
+            PolylineOptions lineOptions = new PolylineOptions();
             MarkerOptions markerOptions = new MarkerOptions();
 
             for (int i = 0; i < result.size(); i++) {
@@ -148,7 +150,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 lineOptions = new PolylineOptions();
 
                 List<HashMap<String, String>> path = result.get(i);
-
+               // Log.e("LOG", String.valueOf(result.get(i)));
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
@@ -159,10 +161,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     points.add(position);
                 }
 
-                lineOptions.addAll(points);
                 lineOptions.width(12);
-                lineOptions.color(Color.RED);
+                lineOptions.color(Color.BLUE);
                 lineOptions.geodesic(true);
+                lineOptions.addAll(points);
 
             }
 
@@ -189,10 +191,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         String output = "json";
 
         // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
 
-        return url;
+        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
     }
 
     /**
@@ -213,7 +214,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
 
             String line = "";
             while ((line = br.readLine()) != null) {
@@ -227,8 +228,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         } finally {
-            assert iStream != null;
-            iStream.close();
+            if(iStream != null)
+                iStream.close();
+            assert urlConnection != null;
             urlConnection.disconnect();
         }
         return data;
